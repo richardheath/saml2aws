@@ -362,7 +362,7 @@ func (oc *Client) Authenticate(loginDetails *creds.LoginDetails) (string, error)
 
 	req, err = http.NewRequest("GET", oktaEntryURL+"/home/amazon_aws/0oagi9d4ouv6LpCWS0x7/272", nil)
 	if err != nil {
-		return samlAssertion, errors.Wrap(err, "error building authentication request")
+		return samlAssertion, errors.Wrap(err, "error building app request")
 	}
 
 	q = req.URL.Query()
@@ -373,7 +373,7 @@ func (oc *Client) Authenticate(loginDetails *creds.LoginDetails) (string, error)
 	req.Header.Add("Accept", "*/*")
 	res, err = oc.client.Do(req)
 	if err != nil {
-		return samlAssertion, errors.Wrap(err, "error retrieving verify response")
+		return samlAssertion, errors.Wrap(err, "error retrieving app response")
 	}
 
 	//try to extract SAMLResponse
