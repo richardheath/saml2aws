@@ -360,6 +360,22 @@ func (oc *Client) Authenticate(loginDetails *creds.LoginDetails) (string, error)
 		return samlAssertion, errors.Wrap(err, "error retrieving verify response")
 	}
 
+	req, err = http.NewRequest("GET", oktaEntryURL+"/home/amazon_aws/0oagi9d4ouv6LpCWS0x7/272", nil)
+	if err != nil {
+		return samlAssertion, errors.Wrap(err, "error building authentication request")
+	}
+
+	q = req.URL.Query()
+	q.Add("RelayState", "/")
+	q.Add("sessionToken", oktaSessionToken)
+	req.URL.RawQuery = q.Encode()
+
+	req.Header.Add("Accept", "*/*")
+	res, err = oc.client.Do(req)
+	if err != nil {
+		return samlAssertion, errors.Wrap(err, "error retrieving verify response")
+	}
+
 	//try to extract SAMLResponse
 	doc, err := goquery.NewDocumentFromResponse(res)
 	if err != nil {
